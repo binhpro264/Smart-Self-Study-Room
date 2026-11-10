@@ -179,7 +179,7 @@ Ví dụ bản tin (dự kiến):
 ## 12. Hình ảnh minh họa
 
 <!-- Thay các dòng dưới bằng ảnh thật, ví dụ: ![ESP32](images/esp32.jpg) -->
-- ESP32 và các cảm biến: images/esp32c6.png
+- ESP32 và các cảm biến: (images/esp32c6.png)
 - Công tắc hành trình dùng cho bàn ghế: `[chèn ảnh]`
 - Phác thảo mô hình phòng học thu nhỏ: `[chèn ảnh]`
 - Mockup dashboard bản đồ phòng: `[chèn ảnh]`
