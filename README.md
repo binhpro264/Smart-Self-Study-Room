@@ -179,10 +179,8 @@ Ví dụ bản tin (dự kiến):
 ## 12. Hình ảnh minh họa
 
 <!-- Thay các dòng dưới bằng ảnh thật, ví dụ: ![ESP32](images/esp32.jpg) -->
-- ESP32 và các cảm biến: `<img width="800" height="800" alt="image" src="https://github.com/user-attachments/assets/863077b0-2c28-40eb-8bbb-c0dc6a2e70c8" />
-`
+- ESP32 và các cảm biến: `images/esp32.png`
 - Công tắc hành trình dùng cho bàn ghế: `[chèn ảnh]`
-- Sơ đồ nối dây (xuất từ Wokwi): `[chèn ảnh]`
 - Phác thảo mô hình phòng học thu nhỏ: `[chèn ảnh]`
 - Mockup dashboard bản đồ phòng: `[chèn ảnh]`
 
