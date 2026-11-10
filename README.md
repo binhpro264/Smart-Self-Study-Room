@@ -1,4 +1,4 @@
-# Phòng tự học thông minh: giám sát chất lượng không khí và phát hiện giữ chỗ ảo
+# Phòng tự học thông minh: giám sát chất lượng không khí và phát hiện đồ bỏ quên
 
 > IoT Apps Dev · ESP32 · MQTT · Node-RED Dashboard · PlatformIO
 
@@ -12,7 +12,7 @@
 Đề tài xây dựng hệ thống IoT trên mô hình phòng tự học thu nhỏ gồm 4 bàn, thực hiện đồng thời hai chức năng:
 
 1. **Giám sát môi trường:** đo nhiệt độ, độ ẩm và chỉ số chất lượng không khí; hiển thị luân phiên cùng ngày giờ trên màn hình OLED; tự động bật quạt thông gió khi chất lượng không khí vượt ngưỡng cho phép.
-2. **Phát hiện giữ chỗ ảo:** mỗi bàn được trang bị hai cảm biến độc lập xác định "có người" và "có đồ". Khi bàn có đồ nhưng không có người vượt quá thời gian chờ cấu hình, hệ thống chuyển sang trạng thái **"Bỏ trống?"** và hiển thị trên bản đồ phòng tại dashboard.
+2. **Phát hiện đồ bỏ quên:** mỗi bàn được trang bị hai cảm biến độc lập xác định "có người" và "có đồ". Khi bàn có đồ nhưng không có người vượt quá thời gian chờ cấu hình, hệ thống chuyển sang trạng thái **"Quên đồ"** và hiển thị cảnh báo trên bản đồ phòng tại dashboard.
 
 Dữ liệu được trao đổi qua giao thức **MQTT** (broker công khai) và được giám sát, điều khiển từ xa bằng **Node-RED Dashboard** trên máy tính và điện thoại.
 
@@ -20,21 +20,22 @@ Dữ liệu được trao đổi qua giao thức **MQTT** (broker công khai) v�
 
 **Chất lượng không khí trong không gian kín.** Phòng tự học thường đóng kín, sử dụng điều hòa và có mật độ người cao, khiến nồng độ khí CO₂ và các chất gây ô nhiễm tăng nhanh, làm giảm sự tỉnh táo và hiệu quả học tập. Người sử dụng thường chỉ nhận biết khi đã xuất hiện triệu chứng mệt mỏi.
 
-**Giữ chỗ ảo.** Trong mùa thi, tình trạng để sách vở, tư trang trên ghế rồi rời đi trong thời gian dài khiến bàn có vẻ đã được sử dụng nhưng thực tế bỏ trống. Điều này làm giảm hiệu suất sử dụng phòng và gây khó khăn cho người đến sau, do không có thông tin khách quan về tình trạng từng chỗ ngồi.
+**Đồ bỏ quên.** Người học thường để lại sách vở, tư trang trên bàn khi rời phòng. Đồ để lại không có người trông coi trong thời gian dài có nguy cơ thất lạc hoặc mất cắp, đồng thời người quản lý khó phát hiện kịp thời do không có thông tin khách quan về tình trạng từng bàn.
 
-**Hướng giải quyết.** Sử dụng cảm biến để thu thập hai nhóm thông tin khách quan: điều kiện môi trường của phòng và trạng thái sử dụng thực tế của từng bàn. Thông tin được cung cấp từ xa cho người quản lý và sinh viên, trong khi việc thông gió được thiết bị tự động xử lý.
+**Hướng giải quyết.** Sử dụng cảm biến để thu thập hai nhóm thông tin khách quan: điều kiện môi trường của phòng và tình trạng từng bàn (có người, có đồ). Thông tin được cung cấp từ xa cho người quản lý và sinh viên, trong khi việc thông gió được thiết bị tự động xử lý.
 
 ## 3. Mục tiêu và phạm vi
 
 **Mục tiêu**
 - Đo và hiển thị nhiệt độ, độ ẩm, chất lượng không khí theo thời gian thực.
 - Điều khiển quạt theo ngưỡng, hỗ trợ hai chế độ Auto và Manual.
-- Xác định trạng thái từng bàn (Trống, Có người, Giữ chỗ, Bỏ trống?) và hiển thị trên bản đồ phòng.
+- Xác định trạng thái từng bàn (Trống, Có người, Tạm vắng, Quên đồ) và hiển thị trên bản đồ phòng.
 - Điều khiển và cấu hình thông số (ngưỡng không khí, thời gian chờ) từ xa qua Node-RED.
 
 **Phạm vi**
 - Mô hình thu nhỏ gồm 4 bàn; cấu trúc topic MQTT theo từng bàn cho phép mở rộng số lượng bàn.
 - Chỉ số chất lượng không khí mang tính tương đối, không thay thế thiết bị đo chuẩn.
+- Hệ thống đánh giá dựa trên thời gian đồ bị để lại mà không có người; các trường hợp người dùng chủ ý để đồ tạm thời được xử lý bằng cách cấu hình thời gian chờ phù hợp.
 
 ## 4. Kiến trúc hệ thống
 
@@ -99,21 +100,21 @@ Mỗi bàn có hai đầu vào số: **có người** (công tắc tại vị tr
 |---|---|---|
 | Trống | Không đồ, không người | Xanh lá |
 | Có người | Có người ngồi | Xanh dương |
-| Giữ chỗ | Có đồ, không người, chưa quá thời gian chờ | Vàng |
-| Bỏ trống? | Có đồ, không người, đã quá thời gian chờ | Đỏ |
+| Tạm vắng | Có đồ, không người, chưa quá thời gian chờ | Vàng |
+| Quên đồ | Có đồ, không người, đã quá thời gian chờ | Đỏ |
 
 ```mermaid
 stateDiagram-v2
     [*] --> TRONG
     TRONG --> CO_NGUOI: có người ngồi
-    TRONG --> GIU_CHO: có đồ, không người
+    TRONG --> TAM_VANG: có đồ, không người
     CO_NGUOI --> TRONG: người đi, không đồ
-    CO_NGUOI --> GIU_CHO: người đi, đồ còn
-    GIU_CHO --> CO_NGUOI: người quay lại
-    GIU_CHO --> BO_TRONG: quá thời gian chờ
-    GIU_CHO --> TRONG: lấy đồ đi
-    BO_TRONG --> CO_NGUOI: người quay lại
-    BO_TRONG --> TRONG: lấy đồ đi
+    CO_NGUOI --> TAM_VANG: người đi, đồ còn
+    TAM_VANG --> CO_NGUOI: người quay lại
+    TAM_VANG --> QUEN_DO: quá thời gian chờ
+    TAM_VANG --> TRONG: lấy đồ đi
+    QUEN_DO --> CO_NGUOI: người quay lại
+    QUEN_DO --> TRONG: lấy đồ đi
 ```
 
 **Thời gian chờ** được cấu hình từ Node-RED: 30 giây khi trình diễn, khoảng 20 phút khi sử dụng thực tế.
@@ -139,7 +140,7 @@ Ví dụ bản tin (dự kiến):
 { "temp": 29.4, "hum": 68, "air": 52, "air_level": "medium" }
 
 // .../desk/2/state
-{ "item": true, "person": false, "state": "HOLD", "wait_s": 840 }
+{ "item": true, "person": false, "state": "AWAY", "wait_s": 840 }
 ```
 
 ## 8. Dashboard Node-RED
@@ -147,13 +148,13 @@ Ví dụ bản tin (dự kiến):
 - **Bản đồ phòng:** lưới 4 bàn xây dựng bằng `ui_template` (HTML/CSS), đổi màu theo bốn trạng thái ở mục 6.2.
 - **Môi trường:** biểu đồ nhiệt độ, độ ẩm và chỉ số không khí theo thời gian.
 - **Điều khiển:** công tắc Auto/Manual cho quạt; thanh trượt chỉnh ngưỡng không khí và thời gian chờ.
-- **Nhật ký sự kiện:** ghi nhận các chuyển trạng thái (ví dụ: "Bàn 2 chuyển sang Bỏ trống? lúc 14:32").
+- **Nhật ký sự kiện:** ghi nhận các chuyển trạng thái (ví dụ: "Bàn 2 chuyển sang Quên đồ lúc 14:32").
 - **Trạng thái thiết bị:** online/offline.
-- *Mở rộng:* thống kê tỷ lệ bàn sử dụng thật so với giữ chỗ; thông báo qua Telegram.
+- *Mở rộng:* thống kê số lần phát hiện quên đồ theo bàn và theo thời gian; thông báo qua Telegram.
 
 ## 9. Đóng góp và tính ứng dụng
 
-- Tích hợp giám sát môi trường và quản lý chỗ ngồi trong một hệ thống, đáp ứng nhu cầu thực tế của phòng tự học và thư viện.
+- Tích hợp giám sát môi trường và phát hiện đồ bỏ quên trong một hệ thống, đáp ứng nhu cầu thực tế của phòng tự học và thư viện.
 - Dùng hai cảm biến độc lập (người, đồ) thay vì cảm biến chuyển động đơn thuần, tránh báo nhầm khi người học ngồi yên.
 - Tăng độ ổn định hệ thống bằng điều khiển quạt có trễ và lọc nhiễu tiếp điểm.
 - Trao đổi dữ liệu hai chiều qua MQTT: dữ liệu cảm biến lên dashboard, lệnh điều khiển và cấu hình xuống thiết bị.
