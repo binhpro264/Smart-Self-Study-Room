@@ -176,13 +176,22 @@ Ví dụ bản tin (dự kiến):
 | 4 | Node-RED: bản đồ phòng, biểu đồ, điều khiển, nhật ký |
 | 5 | Lắp mô hình thực, hiệu chỉnh ngưỡng, kiểm thử, quay video trình diễn |
 
-## 12. Hình ảnh minh họa
+## 12. Hình ảnh linh kiện
 
-<!-- Thay các dòng dưới bằng ảnh thật, ví dụ: ![ESP32](images/esp32.jpg) -->
-- ESP32 và các cảm biến: (images/esp32c6.png)
-- Công tắc hành trình dùng cho bàn ghế: `[chèn ảnh]`
-- Phác thảo mô hình phòng học thu nhỏ: `[chèn ảnh]`
-- Mockup dashboard bản đồ phòng: `[chèn ảnh]`
+<table>
+  <tr>
+    <td align="center"><img src="images/esp32c6.png" width="200"><br><sub><b>Hình 1.</b> Vi điều khiển ESP32</sub></td>
+    <td align="center"><img src="images/dht22.webp" width="200"><br><sub><b>Hình 2.</b> Cảm biến DHT22</sub></td>
+    <td align="center"><img src="images/mq135.webp" width="200"><br><sub><b>Hình 3.</b> Cảm biến MQ-135</sub></td>
+    <td align="center"><img src="images/oled.jpg" width="200"><br><sub><b>Hình 4.</b> Màn hình OLED SSD1306</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="images/fan.webp" width="200"><br><sub><b>Hình 5.</b> Quạt thông gió</sub></td>
+    <td align="center"><img src="images/switch.webp" width="200"><br><sub><b>Hình 6.</b> Công tắc hành trình</sub></td>
+    <td align="center"><img src="images/led.webp" width="200"><br><sub><b>Hình 7.</b> LED trạng thái</sub></td>
+    <td></td>
+  </tr>
+</table>
 
 ## 13. Tài liệu tham khảo
 
