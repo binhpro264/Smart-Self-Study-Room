@@ -1,9 +1,9 @@
 # Phòng tự học thông minh: giám sát chất lượng không khí và phát hiện giữ chỗ ảo
 
-> Đồ án môn Internet vạn vật (IoT) · ESP32 · MQTT · Node-RED Dashboard · PlatformIO
+> IoT Apps Dev · ESP32 · MQTT · Node-RED Dashboard · PlatformIO
 
 - **Sinh viên thực hiện:** Nguyễn Doãn Bình – 23001582
-- **Giảng viên hướng dẫn:** [Tên giảng viên]
+- **Giảng viên hướng dẫn:** Nguyễn Anh Tuấn
 
 ---
 
